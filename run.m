@@ -7,14 +7,14 @@ end
 
 todo.save_results_image = 0;
 todo.benchmark = 0;
-todo.calibrate = 0;
+todo.calibrate = 1;
 todo.ortho_rectify = 0;
 todo.save_ortho_images = 0;
 
 %% plot options (0 if not plotted, figure number otherwise)
-plots.hvps = 1;%1;
-plots.z = 1;%1;
-plots.hl = 1;%1;
+plots.hvps = 0;%1;
+plots.z = 0;%1;
+plots.hl = 0;%1;
 plots.gthl = 0;%1;
 plots.benchmark = 0;%2; % display precision curve and AUC for each dataset (the figure number will be plots.benchmark*100+#dataset)
 plots.manhattan = 0;%1;
@@ -24,7 +24,7 @@ plots.orthorectify = 0; %3; rectified images (the figure number will be plots.or
 imgDir = cell(1,1);
 
 % some test images provided with this code
-imgDir{1,1} = './test_images/'; 
+imgDir{1,1} = './demo_data/imgs/'; 
 
 % the following datasets, as well as the ground truth horizon lines in a
 % unified format can be obtained from our webpage:
@@ -57,7 +57,6 @@ for is = 1:size(imgDir,2)
         
         % call V
         [hl, hvps, hvp_groups, z, z_group, ls] = V(im, width, height, focal, params);
-        
        
         % plot the results
         if plots.hvps
@@ -139,6 +138,26 @@ for is = 1:size(imgDir,2)
         
         if todo.calibrate
             [focal, manh_vps, confident] = calibrate(z, hvps, width, height);
+            
+            name_l = strsplit(imageList{i}, '/');
+            img_name = name_l{end};
+
+            prediction.image_path = img_name;
+            prediction.image_size = [height, width];
+            prediction.lines = ls;
+            prediction.hvps = hvps;
+            prediction.hvp_group = hvp_groups;
+            prediction.zvp = z;
+            prediction.zvp_group = z_group;
+            prediction.focal = focal;
+
+            dir_name = strsplit(img_name, '.');
+            save_path = ['demo_data/output/', dir_name{1}];
+            mkdir(save_path);
+            save([save_path, '/data.mat'], 'prediction');
+
+
+            
             if plots.manhattan && confident >= 0
                 figure(plots.manhattan);
                 u0 = width/2;
