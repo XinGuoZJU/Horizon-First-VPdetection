@@ -1,4 +1,3 @@
-function run
 if ~isdeployed
     addpath util
 end

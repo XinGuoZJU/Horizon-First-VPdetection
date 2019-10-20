@@ -74,6 +74,7 @@ end
 thres_aligned =  max(width,height)/128.;
 length_t = sqrt(width+height)/1.71;
 ls = ls_filter(thres_aligned, length_t, lsd);
+
 ls_homo = normalize(ls, width, height, focal);
 
 % plot the results

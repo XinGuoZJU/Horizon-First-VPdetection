@@ -76,8 +76,9 @@ def process(data_list, save_path):
        
         # image_size: height x width
         vps_output = []
+        scale = max(image_size) / 2
         for vp in vps:
-            new_vp = [(vp[1] - image_size[0] / 2) / (image_size[0] / 2), (vp[0] - image_size[1]) / (image_size[1] / 2)]
+            new_vp = [(vp[1] - image_size[0] / 2) / (image_size[0] / 2), (vp[0] - image_size[1] / 2) / (image_size[1] / 2)]
             vps_output.append(new_vp)
         
         line_segs_output, new_lines_output = lineseg2line(line_segs, image_size)
@@ -92,10 +93,10 @@ def process(data_list, save_path):
 
 
 if __name__ == '__main__':
-    path = '/n/fs/vl/xg5/workspace/baseline/Horizon-First-VPdetection/demo_data/output'
+    path = '/n/fs/vl/xg5/workspace/baseline/Horizon-First-VPdetection/dataset/YUD/output'
     data_list = [os.path.join(path, dir_path + '/data.mat') for dir_path in os.listdir(path)]
 
-    save_path = 'data/data.json'
+    save_path = '/n/fs/vl/xg5/workspace/baseline/Horizon-First-VPdetection/dataset/YUD/data/data.json'
     process(data_list, save_path)
     
 

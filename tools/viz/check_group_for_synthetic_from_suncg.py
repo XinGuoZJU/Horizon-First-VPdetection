@@ -22,9 +22,9 @@ def imshow(im):
 
 
 if __name__ == '__main__':
-    image_path = '/n/fs/vl/xg5/workspace/baseline/Horizon-First-VPdetection/demo_data/imgs'
-    org_path = '/n/fs/vl/xg5/workspace/baseline/Horizon-First-VPdetection/tools/data/data.json'
-    save_path = '/n/fs/vl/xg5/workspace/baseline/Horizon-First-VPdetection/tools/viz_group'
+    image_path = '/n/fs/vl/xg5/Datasets/YUD/YorkUrbanDB'
+    org_path = '/n/fs/vl/xg5/workspace/baseline/Horizon-First-VPdetection/dataset/YUD/data/data.json'
+    save_path = '/n/fs/vl/xg5/workspace/baseline/Horizon-First-VPdetection/dataset/YUD/viz_group'
 
     with open(org_path, 'r') as f:
         org_lines = f.readlines()
@@ -35,7 +35,7 @@ if __name__ == '__main__':
             org_line = np.array(data_dict['org_line']).tolist()
 
             image_dir = data_dict['image_path']
-            image_name = os.path.join(image_path, image_dir)
+            image_name = os.path.join(os.path.join(image_path, image_dir.split('.')[0]), image_dir)
             image = io.imread(image_name).astype(float) / 255
 
             os.makedirs(save_path, exist_ok=True)
