@@ -84,7 +84,9 @@ def process(data_list, save_path):
         line_segs_output, new_lines_output = lineseg2line(line_segs, image_size)
         group_output = group
         
-        image_name = image_path.split('/')[-1]
+        image_names = image_path.split('/')
+        image_name = os.path.join(image_names[-2], image_names[-1])
+        
         json_out = {'image_path': image_name, 'line': new_lines_output, 'org_line': line_segs_output, 
                 'group': group_output, 'vp': vps_output, 'focal': focal} 
 
@@ -94,7 +96,10 @@ def process(data_list, save_path):
 
 if __name__ == '__main__':
     path = '/n/fs/vl/xg5/workspace/baseline/Horizon-First-VPdetection/dataset/YUD/output'
-    data_list = [os.path.join(path, dir_path + '/data.mat') for dir_path in os.listdir(path)]
+    dir_list = [os.path.join(path, dir_path) for dir_path in os.listdir(path)]
+    data_list = []
+    for dirs in dir_list:
+        data_list += [os.path.join(dirs, dir_path + '/data.mat') for dir_path in os.listdir(dirs)]
 
     save_path = '/n/fs/vl/xg5/workspace/baseline/Horizon-First-VPdetection/dataset/YUD/data/data.json'
     process(data_list, save_path)

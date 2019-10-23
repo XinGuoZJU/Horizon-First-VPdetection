@@ -20,10 +20,27 @@ plots.manhattan = 0;%1;
 plots.orthorectify = 0; %3; rectified images (the figure number will be plots.orthorectify*100+#plane)
 
 %% path(s) to the image (set(s))
-imgDir = cell(1,1);
+dataset_name = 'YUD';
+if strcmp(dataset_name, 'YUD')
+    datapath = '/n/fs/vl/xg5/Datasets/YUD/YorkUrbanDB';
+    savepath = 'dataset/YUD/output';
+    img_type = 'jpg';
+elseif strcmp(dataset_name, 'scannet')
+    datapath = '/n/fs/vl/xg5/Datasets/neurodata/scannet-vp';
+    savepath = 'dataset/scannet-vp/output';
+    img_type = 'png';
+end
 
-% some test images provided with this code
-imgDir{1,1} = './demo_data/imgs/'; 
+dirs = dir(datapath);
+ 
+img_list = {};
+for i = 3:size(dirs,1)
+    dir_name = dirs(i).name;
+    dirpath = [datapath, '/', dir_name];
+    if isdir(dirpath)
+        img_list = [img_list; dirpath];
+    end
+end
 
 % the following datasets, as well as the ground truth horizon lines in a
 % unified format can be obtained from our webpage:
@@ -34,8 +51,9 @@ imgDir{1,1} = './demo_data/imgs/';
 % imgDir{1,end+1} = '/home/gsimon/Documents/MATLAB/HLW dataset/images/Tests/';
 
 %% for each image set...
-for is = 1:size(imgDir,2)
-    imageList = glob([imgDir{1,is}, '*.jpg'])
+for is = 1:size(img_list,1)
+    fprintf('%d / %d\n', is, size(img_list,1));
+    imageList = glob([img_list{is,:}, '/*.', img_type]);
     nImages = numel(imageList);
     params = default_params();
     params.include_infinite_hvps = 1;  % includes the detection of infinite 
@@ -48,7 +66,7 @@ for is = 1:size(imgDir,2)
         close all
 
         % read the image
-        fprintf('%d / %d\n', i, nImages);
+        % fprintf('%d / %d\n', i, nImages);
         im = imread(imageList{i});
         width = size(im, 2);
         height = size(im, 1);
@@ -137,11 +155,10 @@ for is = 1:size(imgDir,2)
         
         if todo.calibrate
             [focal, manh_vps, confident] = calibrate(z, hvps, width, height);
-            
             name_l = strsplit(imageList{i}, '/');
             img_name = name_l{end};
-
-            prediction.image_path = img_name;
+            dir_name = name_l{end - 1};
+            prediction.image_path = [dir_name, '/', img_name];
             prediction.image_size = [height, width];
             prediction.lines = ls;
             prediction.hvps = hvps;
@@ -150,13 +167,13 @@ for is = 1:size(imgDir,2)
             prediction.zvp_group = z_group;
             prediction.focal = focal;
 
-            dir_name = strsplit(img_name, '.');
-            save_path = ['demo_data/output/', dir_name{1}];
+            sub_dir_name = strsplit(img_name, '.');
+            
+            save_path = [savepath, '/', dir_name, '/', sub_dir_name{1}];
             mkdir(save_path);
+            
             save([save_path, '/data.mat'], 'prediction');
 
-
-            
             if plots.manhattan && confident >= 0
                 figure(plots.manhattan);
                 u0 = width/2;

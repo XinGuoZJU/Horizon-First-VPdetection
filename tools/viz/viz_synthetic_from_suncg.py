@@ -86,14 +86,15 @@ if __name__ == '__main__':
             item = json.loads(line)
             file_name = item['image_path']
             
-            os.makedirs(save_path, exist_ok=True)
-
             group = np.array(item['group'])
             line_seg = np.array(item['line']).tolist()
             vp = item['vp']
 
+            img_dir = file_name.split('/')[-2]
+            savepath = os.path.join(save_path, img_dir)
+            os.makedirs(savepath, exist_ok=True)
             save_name = os.path.join(save_path, file_name)
-            print(save_name)
+
             visualize(line_seg, group, save_name, vp=vp)
 
 
