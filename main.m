@@ -20,16 +20,26 @@ plots.manhattan = 0;%1;
 plots.orthorectify = 0; %3; rectified images (the figure number will be plots.orthorectify*100+#plane)
 
 %% path(s) to the image (set(s))
-dataset_name = 'YUD';
+dataset_name = 'SceneCityUrban3D';
+
 if strcmp(dataset_name, 'YUD')
     datapath = '/n/fs/vl/xg5/Datasets/YUD/YorkUrbanDB';
     savepath = 'dataset/YUD/output';
     img_type = 'jpg';
-elseif strcmp(dataset_name, 'scannet')
-    datapath = '/n/fs/vl/xg5/Datasets/neurodata/scannet-vp';
-    savepath = 'dataset/scannet-vp/output';
+elseif strcmp(dataset_name, 'ScanNet')
+    datapath = '/n/fs/vl/xg5/Datasets/ScanNet/scannet-vp';
+    savepath = 'dataset/ScanNet/output';
+    img_type = 'png';
+elseif strcmp(dataset_name, 'SceneCityUrban3D')
+    datapath = '/n/fs/vl/xg5/Datasets/SceneCityUrban3D/su3';
+    savepath = 'dataset/SceneCityUrban3D/output';
+    img_type = 'png';
+elseif strcmp(dataset_name, 'SUNCG')
+    datapath = '/n/fs/vl/xg5/Datasets/SUNCG/mlt_v2';
+    savepath = 'dataset/SUNCG/output';
     img_type = 'png';
 end
+
 
 dirs = dir(datapath);
  
@@ -63,6 +73,7 @@ for is = 1:size(img_list,1)
     %     scene = strsplit(imgDir{1,i}, '/');
     %     scene = scene{end-1};
     for i = 1:nImages
+      try
         close all
 
         % read the image
@@ -239,5 +250,13 @@ for is = 1:size(img_list,1)
                 end
             end
         end
+      
+      catch
+        fname = imageList{i};
+        fileID = fopen([dataset_name, '_error.txt'], 'a');
+        fprintf(fileID, [fname, '\n']);
+        fclose(fileID);
+      end
+    
     end
 end
