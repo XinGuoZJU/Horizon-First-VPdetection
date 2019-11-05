@@ -22,9 +22,18 @@ def imshow(im):
 
 
 if __name__ == '__main__':
-    image_path = '/n/fs/vl/xg5/Datasets/YUD/YorkUrbanDB'
-    org_path = '/n/fs/vl/xg5/workspace/baseline/Horizon-First-VPdetection/dataset/YUD/data/data.json'
-    save_path = '/n/fs/vl/xg5/workspace/baseline/Horizon-First-VPdetection/dataset/YUD/viz_group'
+    data_name  = 'SUNCG'  # 'YUD', 'ScanNet', 'SceneCityUrban3D', 'SUNCG'
+    if data_name == 'YUD':
+        image_path = '/n/fs/vl/xg5/Datasets/YUD/YorkUrbanDB'
+    elif data_name == 'ScanNet':
+        image_path = '/n/fs/vl/xg5/Datasets/ScanNet/scannet-vp'
+    elif data_name == 'SceneCityUrban3D':
+        image_path = '/n/fs/vl/xg5/Datasets/SceneCityUrban3D/su3'
+    elif data_name == 'SUNCG':
+        image_path = '/n/fs/vl/xg5/Datasets/SUNCG/mlt_v2'
+
+    org_path = '/n/fs/vl/xg5/workspace/baseline/Horizon_First_VPdetection/dataset/' + data_name + '/data/data.json'
+    save_path = '/n/fs/vl/xg5/workspace/baseline/Horizon_First_VPdetection/dataset/' + data_name + '/viz_group'
 
     with open(org_path, 'r') as f:
         org_lines = f.readlines()

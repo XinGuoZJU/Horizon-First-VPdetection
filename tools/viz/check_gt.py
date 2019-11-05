@@ -44,7 +44,7 @@ def visualize(line_seg, pred_group, save_name, vp=None):
         group = int(pred_group[i])
         
         #######
-        threshold = 20
+        threshold = 10
         if log[group+1] > threshold:
             continue
         log[group+1] += 1
@@ -75,10 +75,31 @@ def visualize(line_seg, pred_group, save_name, vp=None):
 
 
 if __name__ == '__main__':
-    org_path = '/n/fs/vl/xg5/workspace/baseline/Horizon-First-VPdetection/dataset/YUD/data/data.json'
-    save_path = '/n/fs/vl/xg5/workspace/baseline/Horizon-First-VPdetection/dataset/YUD/viz_line'
-    os.makedirs(save_path, exist_ok=True)
+    data_name  = 'SUNCG'  # 'YUD', 'ScanNet', 'SceneCityUrban3D', 'SUNCG'
+    if data_name == 'YUD':
+        image_size = [480, 640]
+    elif data_name == 'ScanNet':
+        image_size = [512, 512]
+    elif data_name == 'SceneCityUrban3D':
+        image_size = [512, 512]
+    elif data_name == 'SUNCG':
+        image_size = [480, 640]
 
+    org_path = '/n/fs/vl/xg5/workspace/baseline/Horizon_First_VPdetection/dataset/' + data_name + '/data/data.json'
+    save_path = '/n/fs/vl/xg5/workspace/baseline/Horizon_First_VPdetection/dataset/' + data_name + '/viz_line'
+    gt_file = '/n/fs/vl/xg5/Datasets/' + data_name + '/label/label.txt'
+    os.makedirs(save_path, exist_ok=True)
+    
+    gt_dict = {}
+    with open(gt_file, 'r') as op:
+        content = op.readlines()
+        for line in content:
+            line_list = line.split()
+            image_name = line_list[0]
+            vps = [[(float(line_list[2*i+2]) - image_size[0] / 2) / (image_size[0] / 2),
+                    (float(line_list[2*i+3]) - image_size[1] / 2) / (image_size[1] / 2)] for i in range(3)]
+            gt_dict[image_name] = vps
+    
     with open(org_path, 'r') as f:
         lines = f.readlines()
         for idx, line in enumerate(lines):
@@ -88,7 +109,8 @@ if __name__ == '__main__':
             
             group = np.array(item['group'])
             line_seg = np.array(item['line']).tolist()
-            vp = item['vp']
+            # vp = item['vp']
+            vp = gt_dict[file_name]
 
             img_dir = file_name.split('/')[-2]
             savepath = os.path.join(save_path, img_dir)
