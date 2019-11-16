@@ -61,6 +61,21 @@ elseif strcmp(dataset_name, 'SUNCG_error')
     datapath = '/n/fs/vl/xg5/Datasets/SUNCG/mlt_v2';
     savepath = 'dataset/SUNCG/output';
     img_type = 'png';
+elseif strcmp(dataset_name, 'ScanNet_aug')
+    index_file = ['/n/fs/vl/xg5/Datasets/ScanNet_aug/label/index_', num2str(idx), '.txt'];
+    datapath = '/n/fs/vl/xg5/Datasets/ScanNet_aug/image';
+    savepath = 'dataset/ScanNet_aug/output';
+    img_type = 'png';
+elseif strcmp(dataset_name, 'SceneCityUrban3D_aug')
+    index_file = ['/n/fs/vl/xg5/Datasets/SceneCityUrban3D_aug/label/index_', num2str(idx), '.txt'];
+    datapath = '/n/fs/vl/xg5/Datasets/SceneCityUrban3D_aug/image';
+    savepath = 'dataset/SceneCityUrban3D_aug/output';
+    img_type = 'png';
+elseif strcmp(dataset_name, 'SUNCG_aug')
+    index_file = ['/n/fs/vl/xg5/Datasets/SUNCG_aug/label/index_', num2str(idx), '.txt'];
+    datapath = '/n/fs/vl/xg5/Datasets/SUNCG_aug/image';
+    savepath = 'dataset/SUNCG_aug/output';
+    img_type = 'png';
 end
 
 

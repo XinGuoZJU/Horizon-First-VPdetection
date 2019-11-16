@@ -14,6 +14,17 @@ def run(dataset_name, idx, save_op):
     elif dataset_name == 'SUNCG':
         index_file = '/n/fs/vl/xg5/Datasets/SUNCG/label/index_' + str(idx) + '.txt'
         img_type = 'png'
+    elif dataset_name == 'ScanNet_aug':
+        index_file = '/n/fs/vl/xg5/Datasets/ScanNet_aug/label/index_' + str(idx) + '.txt'
+        img_type = 'jpg'
+    elif dataset_name == 'SceneCityUrban3D_aug':
+        index_file = '/n/fs/vl/xg5/Datasets/SceneCityUrban3D_aug/label/index_' + str(idx) + '.txt'
+        img_type = 'jpg'
+    elif dataset_name == 'SUNCG_aug':
+        index_file = '/n/fs/vl/xg5/Datasets/SUNCG_aug/label/index_' + str(idx) + '.txt'
+        img_type = 'png'
+    else:
+        raise ValueError('No such dataset!')
 
     data_path = '/n/fs/vl/xg5/workspace/baseline/Horizon_First_VPdetection/dataset/' \
                                                         + dataset_name + '/output'
@@ -54,7 +65,7 @@ def run(dataset_name, idx, save_op):
 if __name__ == '__main__':
     # YUD: 1, ScanNet: 265, SceneCityUrban3D: 23, SUNCG: 569
     # data_list = ['YUD', 'ScanNet', 'SceneCityUrban3D', 'SUNCG']
-    data_list = ['SUNCG']
+    data_list = ['ScanNet_aug', 'SUNCG_aug', 'SceneCityUrban3D_aug']
     num = 30
     
     for data_name in data_list:
